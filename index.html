@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#114b3e">
+    <meta name="description" content="Catálogo e inventario digital para tu negocio local.">
+    <title>StockQuick — Catálogo e inventario</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegación principal">
+        <a class="brand" href="#" aria-label="StockQuick, inicio">
+          <span class="brand-mark" aria-hidden="true">S<span>✓</span></span>
+          <span class="brand-name">stock<span>quick</span></span>
+        </a>
+
+        <p class="nav-caption">MENÚ PRINCIPAL</p>
+        <nav class="main-nav">
+          <button class="nav-link is-active" data-view="dashboard" type="button">
+            <span class="nav-icon" aria-hidden="true">▦</span> Resumen
+          </button>
+          <button class="nav-link" data-view="catalog" type="button">
+            <span class="nav-icon" aria-hidden="true">▤</span> Catálogo
+          </button>
+          <button class="nav-link" data-view="inventory" type="button">
+            <span class="nav-icon" aria-hidden="true">▣</span> Inventario
+          </button>
+          <button class="nav-link" data-view="orders" type="button">
+            <span class="nav-icon" aria-hidden="true">⌑</span> Pedidos
+            <span class="nav-count" id="nav-order-count">0</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-bottom">
+          <div class="help-card">
+            <span class="help-icon" aria-hidden="true">✦</span>
+            <strong>Tu negocio, en orden.</strong>
+            <p>Controla tus productos y atiende más rápido.</p>
+          </div>
+          <div class="store-profile">
+            <span class="avatar">SQ</span>
+            <span><strong>Mi tienda</strong><small>Administrador</small></span>
+            <span class="profile-dots" aria-hidden="true">···</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>Mi tienda</span><span class="breadcrumb-divider">/</span><strong id="breadcrumb-current">Resumen</strong></div>
+          <div class="topbar-actions">
+            <span class="store-status"><span class="status-dot"></span> Tienda activa</span>
+            <button class="icon-button mobile-menu" id="mobile-menu" type="button" aria-label="Abrir navegación">☰</button>
+            <button class="avatar avatar-small" type="button" aria-label="Perfil de Mi tienda">SQ</button>
+          </div>
+        </header>
+
+        <div class="page-content">
+          <section class="view-panel is-visible" id="dashboard-view" aria-labelledby="page-title">
+            <div class="welcome-row">
+              <div>
+                <p class="eyebrow"><span class="eyebrow-line"></span> MIÉRCOLES, <span id="today-date"></span></p>
+                <h1 id="page-title">¡Hola! <span class="wave" aria-hidden="true">✦</span></h1>
+                <p class="page-subtitle">Aquí tienes el resumen de tu negocio hoy.</p>
+              </div>
+              <button class="button button-primary" type="button" data-open-product>
+                <span aria-hidden="true">＋</span> Agregar producto
+              </button>
+            </div>
+
+            <div class="stats-grid" aria-label="Resumen del inventario">
+              <article class="stat-card">
+                <div class="stat-top"><span>Total de productos</span><span class="stat-icon mint" aria-hidden="true">▤</span></div>
+                <strong class="stat-value" id="stat-products">0</strong>
+                <span class="stat-note">Productos en tu catálogo</span>
+              </article>
+              <article class="stat-card">
+                <div class="stat-top"><span>Unidades en stock</span><span class="stat-icon lavender" aria-hidden="true">▣</span></div>
+                <strong class="stat-value" id="stat-units">0</strong>
+                <span class="stat-note">Unidades disponibles</span>
+              </article>
+              <article class="stat-card">
+                <div class="stat-top"><span>Por agotarse</span><span class="stat-icon peach" aria-hidden="true">⌁</span></div>
+                <strong class="stat-value" id="stat-low">0</strong>
+                <span class="stat-note">Productos con stock bajo</span>
+              </article>
+              <article class="stat-card">
+                <div class="stat-top"><span>Pedidos recibidos</span><span class="stat-icon yellow" aria-hidden="true">⌑</span></div>
+                <strong class="stat-value" id="stat-orders">0</strong>
+                <span class="stat-note">Pedidos registrados</span>
+              </article>
+            </div>
+
+            <section class="catalog-section" aria-labelledby="catalog-title">
+              <div class="section-heading">
+                <div>
+                  <p class="section-kicker">LO QUE TIENES PARA OFRECER</p>
+                  <h2 id="catalog-title">Tu catálogo</h2>
+                </div>
+                <button class="text-button" type="button" data-view="catalog">Ver catálogo <span aria-hidden="true">→</span></button>
+              </div>
+              <div class="catalog-toolbar">
+                <label class="search-box">
+                  <span aria-hidden="true">⌕</span>
+                  <input id="product-search" type="search" placeholder="Busca un producto..." autocomplete="off" aria-label="Buscar productos">
+                  <kbd>⌘ K</kbd>
+                </label>
+                <div class="category-filters" id="category-filters" aria-label="Filtrar por categoría"></div>
+              </div>
+              <div class="product-grid" id="product-grid" aria-live="polite"></div>
+              <div class="empty-state" id="empty-state" hidden>
+                <span class="empty-icon" aria-hidden="true">⌕</span>
+                <h3>No encontramos productos</h3>
+                <p>Prueba con otra búsqueda o agrega un producto a tu catálogo.</p>
+                <button class="button button-secondary" type="button" data-open-product>Agregar producto</button>
+              </div>
+            </section>
+
+            <footer class="page-footer"><span>© <span id="current-year"></span> StockQuick</span><span>Inventario simple, negocio más ágil.</span></footer>
+          </section>
+
+          <section class="view-panel" id="orders-view" aria-labelledby="orders-title">
+            <div class="welcome-row">
+              <div><p class="eyebrow"><span class="eyebrow-line"></span> ATENCIÓN AL CLIENTE</p><h1 id="orders-title">Pedidos</h1><p class="page-subtitle">Consulta los pedidos que has registrado.</p></div>
+              <button class="button button-primary" type="button" data-view="catalog">＋ Crear pedido</button>
+            </div>
+            <div class="orders-card">
+              <div class="orders-heading"><div><p class="section-kicker">ACTIVIDAD DE TU TIENDA</p><h2>Pedidos recientes</h2></div><span class="order-total" id="orders-total">0 pedidos</span></div>
+              <div id="orders-list"></div>
+            </div>
+          </section>
+
+          <section class="view-panel" id="inventory-view" aria-labelledby="inventory-title">
+            <div class="welcome-row">
+              <div><p class="eyebrow"><span class="eyebrow-line"></span> CONTROL DE EXISTENCIAS</p><h1 id="inventory-title">Inventario</h1><p class="page-subtitle">Administra tus productos, precios y cantidades.</p></div>
+              <button class="button button-primary" type="button" data-open-product>＋ Agregar producto</button>
+            </div>
+            <div class="inventory-card">
+              <div class="inventory-toolbar"><div><p class="section-kicker">TODOS TUS PRODUCTOS</p><h2>Existencias</h2></div><label class="search-box inventory-search"><span aria-hidden="true">⌕</span><input id="inventory-search" type="search" placeholder="Buscar producto..." aria-label="Buscar en el inventario"></label></div>
+              <div class="table-wrap">
+                <table class="inventory-table">
+                  <thead><tr><th>PRODUCTO</th><th>CATEGORÍA</th><th>PRECIO</th><th>STOCK</th><th>ESTADO</th><th><span class="visually-hidden">Acciones</span></th></tr></thead>
+                  <tbody id="inventory-body"></tbody>
+                </table>
+              </div>
+              <div class="empty-state" id="inventory-empty" hidden><span class="empty-icon" aria-hidden="true">▤</span><h3>No hay productos todavía</h3><p>Agrega productos para comenzar a controlar tu inventario.</p><button class="button button-secondary" type="button" data-open-product>Agregar producto</button></div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <dialog class="modal" id="product-modal" aria-labelledby="product-modal-title">
+      <form class="modal-card" id="product-form">
+        <div class="modal-heading"><div><p class="section-kicker">CATÁLOGO E INVENTARIO</p><h2 id="product-modal-title">Agregar producto</h2></div><button class="icon-button close-modal" type="button" data-close-modal aria-label="Cerrar">×</button></div>
+        <input type="hidden" id="product-id">
+        <label class="form-field">Nombre del producto<input id="product-name" name="name" type="text" maxlength="70" placeholder="Ej. Papas clásicas 115g" required></label>
+        <div class="form-row">
+          <label class="form-field">Categoría<select id="product-category" name="category" required><option value="Abarrotes">Abarrotes</option><option value="Bebidas">Bebidas</option><option value="Snacks">Snacks</option><option value="Lácteos">Lácteos</option><option value="Otros">Otros</option></select></label>
+          <label class="form-field">Precio<input id="product-price" name="price" type="number" min="0" step="50" placeholder="3500" required></label>
+        </div>
+        <div class="form-row">
+          <label class="form-field">Unidades disponibles<input id="product-stock" name="stock" type="number" min="0" step="1" placeholder="24" required></label>
+          <label class="form-field">Emoji del producto<input id="product-emoji" name="emoji" type="text" maxlength="4" placeholder="🥔" aria-label="Emoji del producto"></label>
+        </div>
+        <label class="form-field">Descripción <span class="optional-label">OPCIONAL</span><textarea id="product-description" name="description" maxlength="140" rows="2" placeholder="Agrega un detalle breve del producto"></textarea></label>
+        <p class="form-error" id="form-error" role="alert" hidden></p>
+        <div class="modal-actions"><button class="button button-quiet" type="button" data-close-modal>Cancelar</button><button class="button button-primary" type="submit" id="save-product-button">Guardar producto</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="modal" id="checkout-modal" aria-labelledby="checkout-title">
+      <form class="modal-card" id="checkout-form">
+        <div class="modal-heading"><div><p class="section-kicker">FINALIZAR PEDIDO</p><h2 id="checkout-title">Datos del cliente</h2></div><button class="icon-button close-modal" type="button" data-close-modal aria-label="Cerrar">×</button></div>
+        <div id="checkout-items" class="checkout-items"></div>
+        <label class="form-field">Nombre del cliente<input id="customer-name" name="customer" type="text" maxlength="70" placeholder="Nombre y apellido" required></label>
+        <label class="form-field">Contacto <span class="optional-label">OPCIONAL</span><input id="customer-contact" name="contact" type="tel" maxlength="30" placeholder="Teléfono o WhatsApp"></label>
+        <p class="checkout-total">Total del pedido <strong id="checkout-total">$0</strong></p>
+        <p class="form-error" id="checkout-error" role="alert" hidden></p>
+        <div class="modal-actions"><button class="button button-quiet" type="button" data-close-modal>Seguir viendo</button><button class="button button-primary" type="submit">Confirmar pedido</button></div>
+      </form>
+    </dialog>
+
+    <div class="cart-bar" id="cart-bar" hidden>
+      <span class="cart-count" id="cart-count">0</span><span id="cart-summary">productos seleccionados</span>
+      <button class="button button-light" id="open-checkout" type="button">Ver pedido <span aria-hidden="true">→</span></button>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
